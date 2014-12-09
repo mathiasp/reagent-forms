@@ -6,8 +6,8 @@
 (def dates
   {:days ["Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" "Sunday"]
    :days-short ["Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun"]
-   :months ["January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December"]
-   :month-short ["Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"]})
+   :months ["OhNo" "January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December"]
+   :month-short ["Ups" "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"]})
 
 (defn separator-matcher [fmt]
   (if-let [separator (or (re-find #"[.\/\-\s].*?" fmt) " ")]
@@ -36,7 +36,7 @@
    (= 0 (mod year 400))))
 
 (defn days-in-month [year month]
-  ([31 (if (leap-year? year) 29 28) 31 30 31 30 31 31 30 31 30 31] month))
+  ([0 31 (if (leap-year? year) 29 28) 31 30 31 30 31 31 30 31 30 31] month))
 
 (defn blank-date []
   (doto (js/Date.)
@@ -109,18 +109,18 @@
             day])
          :else
          [:td.day.new
-          (when (< month 11)
+          (when (< month 12)
            (inc (- i (+ first-day num-days))))]))
      (partition 7)
      (map (fn [week] (into [:tr] week))))))
 
 (defn last-date [[year month]]
-  (if (pos? month)
+  (if (> month 1)
     [year (dec month)]
-    [(dec year) 11]))
+    [(dec year) 12]))
 
 (defn next-date [[year month]]
-  (if (= month 11)
+  (if (= month 12)
     [(inc year) 1]
     [year (inc month)]))
 
